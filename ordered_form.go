@@ -10,9 +10,19 @@ import (
 // Both the key and value are query escaped when using Set().
 type OrderedForm [][2]string
 
+// Set sets the key and value using QueryEscape.
+// This is the default behavior for the OrderedForm.
 func (o *OrderedForm) Set(k, v string) {
 	// Set the key, and url encode the value
 	m := [2]string{url.QueryEscape(k), url.QueryEscape(v)}
+	*o = append(*o, m)
+}
+
+// SetPathEscape sets the key and value using PathEscape instead of QueryEscape.
+// PathEscape is used for %20 instead of +
+func (o *OrderedForm) SetPathEscape(k, v string) {
+	// Set the key, and url encode the value
+	m := [2]string{url.PathEscape(k), url.PathEscape(v)}
 	*o = append(*o, m)
 }
 
@@ -32,6 +42,7 @@ func (o *OrderedForm) URLEncode() string {
 
 // Iterate calls the callback function for each key-value pair in the form.
 // example:
+//
 //	 form.Iterate(func(k, v string) {
 //		fmt.Printf("Key: %s, Value: %s\n", k, v)
 //	})
@@ -48,23 +59,23 @@ func (o *OrderedForm) Iterate(callback func(k, v string)) {
 
 // UpdateSet updates the value of a key if it exists in the form. If not, it adds the key-value pair.
 func (o *OrderedForm) UpdateSet(k, v string) {
-    // URL encode the key and value
-    encodedKey := url.QueryEscape(k)
-    encodedValue := url.QueryEscape(v)
-    found := false
+	// URL encode the key and value
+	encodedKey := url.QueryEscape(k)
+	encodedValue := url.QueryEscape(v)
+	found := false
 
-    // Iterate over the form to find the key
-    for i, pair := range *o {
-        if pair[0] == encodedKey {
-            // Update the value if the key is found
-            (*o)[i][1] = encodedValue
-            found = true
-            break
-        }
-    }
+	// Iterate over the form to find the key
+	for i, pair := range *o {
+		if pair[0] == encodedKey {
+			// Update the value if the key is found
+			(*o)[i][1] = encodedValue
+			found = true
+			break
+		}
+	}
 
-    // If the key was not found, add it
-    if !found {
-        o.Set(k, v)
-    }
+	// If the key was not found, add it
+	if !found {
+		o.Set(k, v)
+	}
 }
