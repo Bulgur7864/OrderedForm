@@ -1,14 +1,14 @@
 # OrderedForm
 ## Installation
 Run the following command in your project folder:
-``go get github.com/justhyped/OrderedForm``
+``go get github.com/Bulgur7864/OrderedForm``
 
 ## Usage
 ```go
 package main
 
 import (
-	"github.com/justhyped/OrderedForm"
+	"github.com/Bulgur7864/OrderedForm"
 	"net/http"
 	"strings"
 )
@@ -28,5 +28,6 @@ func main() {
 	// and it's order is maintained.	
 }
 ```
+This is a fork of justhyped (github.com/justhyped/OrderedForm)
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
